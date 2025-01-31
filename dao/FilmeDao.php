@@ -24,14 +24,13 @@ class FilmeDAO{
                             $filme->isLancado()? 1 : 0 ));// tava dando bo pq no bdd eu não conseguia tirar do tinyint pra boolean e coloquei assim pq ele considera numero mesmo e deu certo
         
     }
-    public function listarFilmes(){
-        $sql = "SELECT * FROM filmes";
+    public function buscarFilmes(string $where = '', array $parametros = []) {
+        $sql = "SELECT * FROM filmes " . ($where ? "WHERE $where" : "");
         $con = Conexao::getConn();
         $stm = $con->prepare($sql);
-        $stm->execute();
-        $registros = $stm->fetchAll();
-        return $this->mapFilmes($registros);
-    }  
+        $stm->execute($parametros);
+        return $this->mapFilmes($stm->fetchAll());
+    } 
     
     public function excluirFilme($id){
         $sql = "DELETE FROM filmes WHERE id = ?";

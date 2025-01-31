@@ -19,48 +19,47 @@ function buscaAvancada()
         echo "* 3 - VER DA MAIOR PARA MENOR AVALIAÇÃO*\n";
         echo "* 4 - VER POR GÊNERO                   *\n";
         echo "* 0 - VOLTAR AO MENU PRINCIPAL         *\n";
-        echo "****************************************\n";
+        echo "****************************************\n\n";
         $resposta = readline("Digite sua resposta: ");
 
         switch ($resposta) {
             case 1:
-                $filmes = $filmeDao->listarFilmes();
+                $filmes = $filmeDao->buscarFilmes();
                 listarFilmes($filmes);
                 $id = readline("Digite o ID do filme: ");
-                $filmeId = $filmeDao->buscarPorId($id);
+                $filmeId = $filmeDao->buscarFilmes('id = ?', [$id]);
                 if ($filmeId) {
-                    echo "****************************************\n";
+                    echo "\n****************************************\n";
                     echo "*           FILME ENCONTRADO           *\n";
                     echo "****************************************\n";
                     listarFilmes($filmeId);
-                    echo "****************************************\n";
+                    echo "****************************************\n\n";
                 } 
                 break;
             case 2:
 
-            case 2:
-                $ano = readline("Digite o ano de lançamento: ");
-                $filmesAno = $filmeDao->buscarPorAnoLancamento($ano);
-                echo "****************************************\n";
-                echo "*      FILMES LANÇADOS EM " . $ano . "      *\n";
-                echo "****************************************\n";
+            case 2://maior para menor ano
+                $filmesAno = $filmeDao->buscarFilmes('1 ORDER BY ano_lancamento DESC');
+                echo "\n****************************************\n";
+                echo "*              FILMES LANÇADOS         *\n";
+                echo "****************************************\n\n";
                 listarFilmes($filmesAno);
                 break;
             case 3: // Da maior para a menor avaliação
-                $filmesAvaliacao = $filmeDao->buscarPorAvaliacaoDesc();
-                echo "****************************************\n";
+                $filmesAvaliacao = $filmeDao->buscarFilmes('1 ORDER BY avaliacao DESC');
+                echo "\n****************************************\n";
                 echo "* FILMES ORDENADOS POR AVALIAÇÃO (DESC) *\n";
-                echo "****************************************\n";
+                echo "****************************************\n\n";
                 listarFilmes($filmesAvaliacao);
                 break;
             case 4:
                 $genero = menuGenero();
-                $filmesGenero = $filmeDao->buscarGenero($genero);
-                echo "****************************************\n";
-                echo "* FILMES ORDENADOS POR AVALIAÇÃO (DESC) *\n";
-                echo "****************************************\n";
+                $filmesGenero = $filmeDao->buscarFilmes('tipo = ?', [$genero]);
+                echo "\n****************************************\n";
+                echo "*      FILMES ORDENADOS POR GENÊRO     *\n";
+                echo "****************************************\n\n";
                 listarFilmes($filmesGenero);
-                break;
+                break; 
         }
     } while ($resposta != 0);
 }
@@ -69,7 +68,7 @@ function listarFilmes($filmes)
     if (!empty($filmes)) {
         foreach ($filmes as $filme) {
             echo "ID: {$filme->getId()} | Título: {$filme->getTitulo()} | Gênero: {$filme->getTipo()} | Duração: {$filme->getDuracao()} minutos | Diretor: {$filme->getDiretor()} | Prêmios: " . ($filme->getPremios() ?: "Nenhum") . " | Descrição: {$filme->getDescricao()} | Avaliação: {$filme->getAvaliacao()} | " . ($filme->isLancado() ? "Ano de Lançamento: {$filme->getAnoLancamento()}" : "Lançamento em {$filme->getAnoLancamento()}") . "\n";
-            echo str_repeat("-", 160) . "\n";
+            echo str_repeat("-", 100) . "\n";
         }
     } else {
         echo "Nenhum filme encontrado.\n";
@@ -127,13 +126,13 @@ do {
     echo "* 3 - LISTAR FILMES                    *\n";
     echo "* 4 - BUSCA AVANÇADA                   *\n";
     echo "* 0 - SAIR                             *\n";
-    echo "****************************************\n";
+    echo "****************************************\n\n";
     $resposta = readline("Digite sua resposta: ");
     switch ($resposta) {
         case 1:
             echo "****************************************\n";
             echo "*               CADASTRO               *\n";
-            echo "****************************************\n";
+            echo "****************************************\n\n";
             switch (menuGenero()) {
                 case 'R':
                     $filme = new Romance();
@@ -157,20 +156,33 @@ do {
         case 2:
             echo "****************************************\n";
             echo "*                EXCLUIR               *\n";
-            echo "****************************************\n";
-            listarFilmes($filmeDao->listarFilmes());
+            echo "****************************************\n\n";
+            listarFilmes($filmeDao->buscarFilmes());
+            $id = readline("Digite o ID do filme que deseja excluir: ");
+            if($id){
+                $filmeDao->excluirFilme($id);
+                echo "Filme excluído com sucesso\n";
+            }else{
+                echo "ID inválido\n";
+            }
             break;
         case 3:
             echo "****************************************\n";
             echo "*           LISTA DE FILMES            *\n";
-            echo "****************************************\n";
-            listarFilmes($filmeDao->listarFilmes());
+            echo "****************************************\n\n";
+            listarFilmes($filmeDao->buscarFilmes());
             break;
         case 4:
+            buscaAvancada();
             break;
-
+        case 0: 
+            echo "****************************************\n";
+            echo "*     OBRIGADO POR USAR  PHPFLIX 1.0   *\n";
+            echo "****************************************\n";
+        break;
         default:
             echo "OPÇÃO! INVALIDA\n";
             break;
     }
 } while ($resposta != 0);
+
