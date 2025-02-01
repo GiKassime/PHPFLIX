@@ -192,4 +192,3 @@ do {
             break;
     }
 } while ($resposta != 0);
-
