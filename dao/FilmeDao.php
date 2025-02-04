@@ -27,7 +27,7 @@ class FilmeDAO{
                             $filme->getAnoLancamento(),
                             $filme->getTipoBdd(),
                             $filme->isLancado()? 1 : 0,
-                            $genero ));// tava dando bo pq no bdd eu não conseguia tirar do tinyint pra boolean e coloquei assim pq ele considera numero mesmo e deu certo
+                            $genero));// tava dando bo pq no bdd eu não conseguia tirar do tinyint pra boolean e coloquei assim pq ele considera numero mesmo e deu certo
         
     }
     public function buscarFilmes(string $where = '', array $parametros = []) {

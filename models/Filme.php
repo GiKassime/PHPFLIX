@@ -12,7 +12,7 @@ abstract class Filme {
     private float $avaliacao;
 
     abstract function getTipoBdd(): string;//para o Banco de Dados
-    abstract function getTipo() : string;//Para o terminal
+    abstract function getTipo();//Para o terminal
 
     /**
      * Get the value of id

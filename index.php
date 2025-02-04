@@ -57,7 +57,7 @@ function buscaAvancada()
                 $genero = menuGenero();
                 $filmesGenero = $filmeDao->buscarFilmes('tipo = ?', [$genero]);
                 echo "\n****************************************\n";
-                echo "* FILMES ORDENADOS POR GENÊRO DE ".strtoupper( $filmesGenero[0]->getTipo())."   *\n";
+                echo "* FILMES ORDENADOS POR GENÊRO - ".strtoupper($filmesGenero[0]->getTipo() ?? 'OUTRO')  ."   *\n";
                 echo "****************************************\n\n";
                 listarFilmes($filmesGenero);
                 break; 
