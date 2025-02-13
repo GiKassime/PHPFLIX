@@ -12,8 +12,8 @@ class Conexao {
             //define o retorno das consultas
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
             );
-            $dadosCon = "mysql:host=localhost:3307;dbname=filmes";
-            self::$conn = new PDO($dadosCon,"root","",$opcoes);
+            $dadosCon = "mysql:host=localhost:3306;dbname=Phpflix";
+            self::$conn = new PDO($dadosCon,"root","bancodedados",$opcoes);
         }
         return self::$conn;
     }
