@@ -39,7 +39,7 @@ function buscaAvancada()
                 break;
             case 2:
 
-            case 2://maior para menor ano
+            case 2://ano
                 $filmesAno = $filmeDao->buscarFilmes('1 ORDER BY ano_lancamento DESC');
                 echo "\n****************************************\n";
                 echo "*              FILMES LANÇADOS         *\n";
